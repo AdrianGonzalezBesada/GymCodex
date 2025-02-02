@@ -1,6 +1,9 @@
 package com.adriangonzalezbesada.gymcodex
 
+import android.content.ComponentCallbacks2
+import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -42,10 +45,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adriangonzalezbesada.gymcodex.data.Ejercicio
+import com.adriangonzalezbesada.gymcodex.data.EjercicioMock
 import com.adriangonzalezbesada.gymcodex.data.MockExercisesList
 import com.adriangonzalezbesada.gymcodex.ui.theme.GymCodexTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -62,6 +67,38 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("ActivityLifecycle", "Aplicación abierta")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("ActivityLifecycle", "Aplicación minimizada")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("ActivityLifecycle", "Aplicación restaurada")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("ActivityLifecycle", "Aplicación cerrada")
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        Log.d("ActivityLifecycle", "Rotación de pantalla")
+    }
+
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        if (level == ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW) {
+            Log.d("MemoryStatus", "Poca memoria disponible")
         }
     }
 }
@@ -103,7 +140,7 @@ fun MyTopAppBar() {
 @Composable
 fun MainContent(modifier: Modifier = Modifier) {
 
-    val listaEjercicios: List<Ejercicio> = MockExercisesList.exercisesList
+    val listaEjercicios: List<EjercicioMock> = MockExercisesList.exercisesList
 
     Column(
         modifier = modifier,
@@ -122,9 +159,9 @@ fun MainContent(modifier: Modifier = Modifier) {
 
 
 @Composable
-fun RepeaterGridsEjercicios(ejercicios: List<Ejercicio>) {
+fun RepeaterGridsEjercicios(ejercicios: List<EjercicioMock>) {
 
-    val listasPorEjercicio: List<List<Ejercicio>> =
+    val listasPorEjercicio: List<List<EjercicioMock>> =
         ejercicios.groupBy { it.ejercicio }.values.toList();
 
     for (listaPorEjercicio in listasPorEjercicio) {

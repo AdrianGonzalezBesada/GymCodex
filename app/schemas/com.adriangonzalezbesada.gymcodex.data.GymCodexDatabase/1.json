@@ -1,0 +1,88 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "cc934561b762090581b16eb076546192",
+    "entities": [
+      {
+        "tableName": "ejercicios",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id_ejercicio` INTEGER NOT NULL, `nombre_ejercicio` TEXT, `categoria` TEXT, `peso_1` INTEGER, `reps_1` INTEGER, `peso_2` INTEGER, `reps_2` INTEGER, `peso_3` INTEGER, `reps_3` INTEGER, `fecha_creacion` TEXT, PRIMARY KEY(`id_ejercicio`))",
+        "fields": [
+          {
+            "fieldPath": "id_ejercicio",
+            "columnName": "id_ejercicio",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nombre_ejercicio",
+            "columnName": "nombre_ejercicio",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "categoria",
+            "columnName": "categoria",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "peso_1",
+            "columnName": "peso_1",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "reps_1",
+            "columnName": "reps_1",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "peso_2",
+            "columnName": "peso_2",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "reps_2",
+            "columnName": "reps_2",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "peso_3",
+            "columnName": "peso_3",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "reps_3",
+            "columnName": "reps_3",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fecha_creacion",
+            "columnName": "fecha_creacion",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id_ejercicio"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cc934561b762090581b16eb076546192')"
+    ]
+  }
+}
