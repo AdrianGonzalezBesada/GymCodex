@@ -44,8 +44,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.room.Room
 import com.adriangonzalezbesada.gymcodex.data.Ejercicio
+import com.adriangonzalezbesada.gymcodex.data.EjercicioDao
 import com.adriangonzalezbesada.gymcodex.data.EjercicioMock
+import com.adriangonzalezbesada.gymcodex.data.GymCodexDatabase
 import com.adriangonzalezbesada.gymcodex.data.MockExercisesList
 import com.adriangonzalezbesada.gymcodex.ui.theme.GymCodexTheme
 
@@ -53,6 +56,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val db = Room.databaseBuilder(
+            this,
+            GymCodexDatabase::class.java, "database-name"
+        ).build()
+
         enableEdgeToEdge()
         setContent {
             GymCodexTheme {
@@ -63,7 +72,8 @@ class MainActivity : ComponentActivity() {
 
                     MainContent(
                         modifier = Modifier
-                            .padding(innerPadding)
+                            .padding(innerPadding),
+                        db = db
                     )
                 }
             }
@@ -136,11 +146,13 @@ fun MyTopAppBar() {
     )
 }
 
-@Preview(showBackground = true)
 @Composable
-fun MainContent(modifier: Modifier = Modifier) {
+fun MainContent(modifier: Modifier = Modifier, db: GymCodexDatabase) {
 
-    val listaEjercicios: List<EjercicioMock> = MockExercisesList.exercisesList
+    val ejercicioDao = db.ejercicioDao()
+
+//    val listaEjercicios: List<Ejercicio> = ejercicioDao.getAll()
+    val listaEjercicios: List<Ejercicio> = ejercicioDao.getAll()
 
     Column(
         modifier = modifier,
@@ -159,10 +171,10 @@ fun MainContent(modifier: Modifier = Modifier) {
 
 
 @Composable
-fun RepeaterGridsEjercicios(ejercicios: List<EjercicioMock>) {
+fun RepeaterGridsEjercicios(ejercicios: List<Ejercicio>) {
 
-    val listasPorEjercicio: List<List<EjercicioMock>> =
-        ejercicios.groupBy { it.ejercicio }.values.toList();
+    val listasPorEjercicio: List<List<Ejercicio>> =
+        ejercicios.groupBy { it.nombre_ejercicio }.values.toList();
 
     for (listaPorEjercicio in listasPorEjercicio) {
 
@@ -171,7 +183,7 @@ fun RepeaterGridsEjercicios(ejercicios: List<EjercicioMock>) {
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(listaPorEjercicio[0].ejercicio)
+                Text("${listaPorEjercicio[0].nombre_ejercicio}")
             }
 
             Row(
@@ -192,12 +204,12 @@ fun RepeaterGridsEjercicios(ejercicios: List<EjercicioMock>) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("${ejercicio.peso1}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.reps1}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.peso2}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.reps2}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.peso3}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.reps3}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                    Text("${ejercicio.peso_1}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                    Text("${ejercicio.reps_1}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                    Text("${ejercicio.peso_2}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                    Text("${ejercicio.reps_2}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                    Text("${ejercicio.peso_3}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                    Text("${ejercicio.reps_3}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
                 }
             }
         }
