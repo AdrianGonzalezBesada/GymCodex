@@ -7,76 +7,47 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.ui.graphics.Color
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.activity.viewModels
 import androidx.room.Room
 import com.adriangonzalezbesada.gymcodex.data.Ejercicio
-import com.adriangonzalezbesada.gymcodex.data.EjercicioDao
-import com.adriangonzalezbesada.gymcodex.data.EjercicioMock
 import com.adriangonzalezbesada.gymcodex.data.GymCodexDatabase
-import com.adriangonzalezbesada.gymcodex.data.MockExercisesList
-import com.adriangonzalezbesada.gymcodex.ui.theme.GymCodexTheme
+import com.adriangonzalezbesada.gymcodex.data.repositorys.EjercicioRepository
+import com.adriangonzalezbesada.gymcodex.ui.viewmodels.EntrenamientosViewModel
+import com.adriangonzalezbesada.gymcodex.ui.viewmodels.EntrenamientosViewModelFactory
+import com.adriangonzalezbesada.gymcodex.ui.views.EntrenamientosView
+import java.time.ZonedDateTime
 
 class MainActivity : ComponentActivity() {
+
+    lateinit var db: GymCodexDatabase
+    lateinit var ejercicioRepository: EjercicioRepository
+
+    val entrenamientosViewModel: EntrenamientosViewModel by viewModels {
+        EntrenamientosViewModelFactory(ejercicioRepository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val db = Room.databaseBuilder(
-            this,
-            GymCodexDatabase::class.java, "database-name"
-        ).build()
-
         enableEdgeToEdge()
-        setContent {
-            GymCodexTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    topBar = { MyTopAppBar() }
-                ) { innerPadding ->
 
-                    MainContent(
-                        modifier = Modifier
-                            .padding(innerPadding),
-                        db = db
-                    )
-                }
-            }
+        db = Room.databaseBuilder(
+            applicationContext,
+            GymCodexDatabase::class.java, "GymCodexDatabase"
+        ).fallbackToDestructiveMigration().build()
+
+        ejercicioRepository = EjercicioRepository(db.ejercicioDao())
+
+        entrenamientosViewModel.insertEjercicios(
+            mutableListOf(
+                Ejercicio(0,"Sentadilla", fecha_creacion = ZonedDateTime.now()),
+                Ejercicio(0,"Press de banca", fecha_creacion = ZonedDateTime.now()),
+                Ejercicio(0,"Gemelo", fecha_creacion = ZonedDateTime.now())
+            )
+        )
+
+        setContent {
+            EntrenamientosView(entrenamientosViewModel)
         }
     }
 
@@ -113,105 +84,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true)
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyTopAppBar() {
-    CenterAlignedTopAppBar(
-        modifier = Modifier.drawBehind {
-            drawLine(
-                color = Color.Black,
-                start = Offset(0f, size.height - 1f),
-                end = Offset(size.width, size.height - 1f),
-                strokeWidth = 5f
-            )
-        },
-        title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painterResource(id = R.drawable.ic_dumbbell),
-                    contentDescription = "Mancuerna",
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .size(MaterialTheme.typography.titleLarge.fontSize.value.dp)
-                )
-                Text("GymCodex")
-            }
-        },
-        navigationIcon = {
-            IconButton(onClick = { /* Futuro dropdown */ }) {
-                Icon(Icons.Filled.Menu, contentDescription = "Mancuerna")
-            }
-        }
-    )
-}
-
-@Composable
-fun MainContent(modifier: Modifier = Modifier, db: GymCodexDatabase) {
-
-    val ejercicioDao = db.ejercicioDao()
-
-//    val listaEjercicios: List<Ejercicio> = ejercicioDao.getAll()
-    val listaEjercicios: List<Ejercicio> = ejercicioDao.getAll()
-
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            "Esta es una aplicación para tomar registro y hacer un seguimiento de los levantamientos.",
-            modifier = Modifier
-                .padding(vertical = 50.dp)
-                .padding(horizontal = 10.dp)
-        )
-
-        RepeaterGridsEjercicios(listaEjercicios)
-    }
-}
-
-
-@Composable
-fun RepeaterGridsEjercicios(ejercicios: List<Ejercicio>) {
-
-    val listasPorEjercicio: List<List<Ejercicio>> =
-        ejercicios.groupBy { it.nombre_ejercicio }.values.toList();
-
-    for (listaPorEjercicio in listasPorEjercicio) {
-
-        Column(modifier = Modifier.fillMaxWidth().padding(bottom = 35.dp).padding(horizontal = 30.dp)) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("${listaPorEjercicio[0].nombre_ejercicio}")
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Peso 1", modifier = Modifier.weight(1f))
-                Text("Reps 1", modifier = Modifier.weight(1f))
-                Text("Peso 2", modifier = Modifier.weight(1f))
-                Text("Reps 2", modifier = Modifier.weight(1f))
-                Text("Peso 3", modifier = Modifier.weight(1f))
-                Text("Reps 3", modifier = Modifier.weight(1f))
-            }
-
-            for (ejercicio in listaPorEjercicio) {
-
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("${ejercicio.peso_1}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.reps_1}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.peso_2}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.reps_2}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.peso_3}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.reps_3}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                }
-            }
-        }
-    }
-}
