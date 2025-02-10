@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.adriangonzalezbesada.gymcodex.data.Ejercicio
 import com.adriangonzalezbesada.gymcodex.data.repositorys.EjercicioRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 

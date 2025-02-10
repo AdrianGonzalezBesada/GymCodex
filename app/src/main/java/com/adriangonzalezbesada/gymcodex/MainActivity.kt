@@ -15,6 +15,7 @@ import com.adriangonzalezbesada.gymcodex.data.repositorys.EjercicioRepository
 import com.adriangonzalezbesada.gymcodex.ui.viewmodels.EntrenamientosViewModel
 import com.adriangonzalezbesada.gymcodex.ui.viewmodels.EntrenamientosViewModelFactory
 import com.adriangonzalezbesada.gymcodex.ui.views.EntrenamientosView
+import kotlinx.coroutines.delay
 import java.time.ZonedDateTime
 
 class MainActivity : ComponentActivity() {
@@ -38,13 +39,17 @@ class MainActivity : ComponentActivity() {
 
         ejercicioRepository = EjercicioRepository(db.ejercicioDao())
 
+//        entrenamientosViewModel.deleteAllEjercicios()
+
         entrenamientosViewModel.insertEjercicios(
+
             mutableListOf(
                 Ejercicio(0,"Sentadilla", fecha_creacion = ZonedDateTime.now()),
                 Ejercicio(0,"Press de banca", fecha_creacion = ZonedDateTime.now()),
                 Ejercicio(0,"Gemelo", fecha_creacion = ZonedDateTime.now())
             )
         )
+
 
         setContent {
             EntrenamientosView(entrenamientosViewModel)
