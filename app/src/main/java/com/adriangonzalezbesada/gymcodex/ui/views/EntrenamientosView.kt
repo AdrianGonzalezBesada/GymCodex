@@ -42,6 +42,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.adriangonzalezbesada.gymcodex.R
 import com.adriangonzalezbesada.gymcodex.data.Ejercicio
@@ -55,8 +56,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.toList
 import java.time.ZonedDateTime
 
+
 @Composable
 fun EntrenamientosView(entrenamientosViewModel: EntrenamientosViewModel) {
+// fun EntrenamientosView(entrenamientosViewModel: EntrenamientosViewModel = hiltViewModel()) {
 
     GymCodexTheme {
         Scaffold(
