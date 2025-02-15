@@ -7,4 +7,5 @@ plugins {
     id("com.google.devtools.ksp") version "1.9.25-1.0.20" apply false
     id("androidx.room") version "$room_version" apply false
     id("com.google.dagger.hilt.android") version "2.51.1" apply false
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.25"
 }

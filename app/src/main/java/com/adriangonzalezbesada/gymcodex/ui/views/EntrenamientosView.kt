@@ -1,5 +1,6 @@
 package com.adriangonzalezbesada.gymcodex.ui.views
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,18 +49,22 @@ import com.adriangonzalezbesada.gymcodex.R
 import com.adriangonzalezbesada.gymcodex.data.Ejercicio
 import com.adriangonzalezbesada.gymcodex.data.EjercicioDao
 import com.adriangonzalezbesada.gymcodex.data.GymCodexDatabase
+import com.adriangonzalezbesada.gymcodex.data.RetrofitInstance
 import com.adriangonzalezbesada.gymcodex.ui.theme.GymCodexTheme
 import com.adriangonzalezbesada.gymcodex.ui.viewmodels.EntrenamientosViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 import java.time.ZonedDateTime
 
 
 @Composable
 fun EntrenamientosView(entrenamientosViewModel: EntrenamientosViewModel) {
-// fun EntrenamientosView(entrenamientosViewModel: EntrenamientosViewModel = hiltViewModel()) {
 
     GymCodexTheme {
         Scaffold(
@@ -109,21 +114,58 @@ fun MyTopAppBar() {
 
     )
 
-
 }
 
 @Composable
 fun MainContent(modifier: Modifier = Modifier, entrenamientosViewModel: EntrenamientosViewModel) {
 
+    val ultimoCommit by entrenamientosViewModel.ultimoCommit.collectAsState()
+
+    LaunchedEffect(Unit) {
+        entrenamientosViewModel.getLastCommitInfo()
+    }
+
+//    LaunchedEffect(Unit) {
+//        val response = try {
+//
+//            RetrofitInstance.api.getLastCommitInfo()
+//        } catch (e: IOException) {
+//            Log.d("RetrofitInstace", "IOException")
+//            return@LaunchedEffect
+//        } catch (e: HttpException) {
+//            Log.d("RetrofitInstace", "HttpException")
+//            return@LaunchedEffect
+//        }
+//
+//        if (response.isSuccessful) {
+//            ultimoCommit = response.body()?.commit?.message ?: ""
+//        }
+//        else {
+//            Log.d("RetrofitInstace", "Response not successful")
+//        }
+//
+//        if (ultimoCommit != "") {
+//            ultimoCommit = "Notas del parche: $ultimoCommit"
+//        }
+//    }
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (ultimoCommit != "") {
+            Text(
+                "$ultimoCommit",
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .padding(horizontal = 10.dp)
+            )
+        }
+
         Text(
             "Esta es una aplicación para tomar registro y hacer un seguimiento de los levantamientos.",
             modifier = Modifier
-                .padding(vertical = 50.dp)
+                .padding(vertical = 40.dp)
                 .padding(horizontal = 10.dp)
         )
 
