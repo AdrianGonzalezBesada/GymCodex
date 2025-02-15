@@ -3,17 +3,16 @@ package com.adriangonzalezbesada.gymcodex.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adriangonzalezbesada.gymcodex.data.Ejercicio
-import com.adriangonzalezbesada.gymcodex.data.repositorys.EjercicioRepositoryImpl
+import com.adriangonzalezbesada.gymcodex.data.repositorys.IEjercicioRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//@HiltViewModel
+@HiltViewModel
 class EntrenamientosViewModel @Inject constructor(
-    private val ejercicioRepositoryImpl: EjercicioRepositoryImpl
+    private val ejercicioRepositoryImpl: IEjercicioRepository
 ) : ViewModel() {
 
     val allEjercicios: Flow<List<Ejercicio>> = ejercicioRepositoryImpl.allEjercicios

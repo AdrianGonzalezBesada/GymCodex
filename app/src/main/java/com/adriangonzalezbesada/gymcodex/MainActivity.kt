@@ -13,7 +13,6 @@ import com.adriangonzalezbesada.gymcodex.data.Ejercicio
 import com.adriangonzalezbesada.gymcodex.data.GymCodexDatabase
 import com.adriangonzalezbesada.gymcodex.data.repositorys.EjercicioRepositoryImpl
 import com.adriangonzalezbesada.gymcodex.ui.viewmodels.EntrenamientosViewModel
-import com.adriangonzalezbesada.gymcodex.ui.viewmodels.EntrenamientosViewModelFactory
 import com.adriangonzalezbesada.gymcodex.ui.views.EntrenamientosView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -22,29 +21,14 @@ import java.time.ZonedDateTime
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    lateinit var db: GymCodexDatabase
-    lateinit var ejercicioRepository: EjercicioRepositoryImpl
-
-    val entrenamientosViewModel: EntrenamientosViewModel by viewModels {
-        EntrenamientosViewModelFactory(ejercicioRepository)
-    }
-
-//    Esto es lo único que debería de necesitarse mediante Hilt, sin inicializaciones ni parámetro a la vista
-//    private val entrenamientosViewModel: EntrenamientosViewModel by viewModels()
+    private val entrenamientosViewModel: EntrenamientosViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
 
-        db = Room.databaseBuilder(
-                applicationContext,
-        GymCodexDatabase::class.java, "GymCodexDatabase"
-        ).fallbackToDestructiveMigration().build()
-
-        ejercicioRepository = EjercicioRepositoryImpl(db.ejercicioDao())
-
-        entrenamientosViewModel.deleteAllEjercicios()
+//        entrenamientosViewModel.deleteAllEjercicios()
 
         entrenamientosViewModel.insertEjercicios(
 
@@ -55,10 +39,8 @@ class MainActivity : ComponentActivity() {
             )
         )
 
-
         setContent {
             EntrenamientosView(entrenamientosViewModel)
-//            EntrenamientosView()
         }
     }
 
