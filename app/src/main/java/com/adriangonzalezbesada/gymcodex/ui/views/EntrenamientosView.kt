@@ -50,6 +50,8 @@ import com.adriangonzalezbesada.gymcodex.data.Ejercicio
 import com.adriangonzalezbesada.gymcodex.data.EjercicioDao
 import com.adriangonzalezbesada.gymcodex.data.GymCodexDatabase
 import com.adriangonzalezbesada.gymcodex.data.RetrofitInstance
+import com.adriangonzalezbesada.gymcodex.data.RetrofitInstanceHiltnt
+import com.adriangonzalezbesada.gymcodex.data.repositorys.CommitAPIImpl
 import com.adriangonzalezbesada.gymcodex.ui.theme.GymCodexTheme
 import com.adriangonzalezbesada.gymcodex.ui.viewmodels.EntrenamientosViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -119,35 +121,41 @@ fun MyTopAppBar() {
 @Composable
 fun MainContent(modifier: Modifier = Modifier, entrenamientosViewModel: EntrenamientosViewModel) {
 
-    val ultimoCommit by entrenamientosViewModel.ultimoCommit.collectAsState()
+    var ultimoCommit by remember { mutableStateOf("") }
 
-    LaunchedEffect(Unit) {
-        entrenamientosViewModel.getLastCommitInfo()
-    }
+    /*
+    Implementé Hilt para retrofit, pero a la hora de retornar el Response<LasCommitResponse>,
+    daba el error java.lang.IllegalArgumentException: Unable to create call adapter for retrofit2.Response<com.adriangonzalezbesada.gymcodex.data.LastCommitResponse>
+     */
+//    val ultimoCommit by entrenamientosViewModel.ultimoCommit.collectAsState()
 
 //    LaunchedEffect(Unit) {
-//        val response = try {
-//
-//            RetrofitInstance.api.getLastCommitInfo()
-//        } catch (e: IOException) {
-//            Log.d("RetrofitInstace", "IOException")
-//            return@LaunchedEffect
-//        } catch (e: HttpException) {
-//            Log.d("RetrofitInstace", "HttpException")
-//            return@LaunchedEffect
-//        }
-//
-//        if (response.isSuccessful) {
-//            ultimoCommit = response.body()?.commit?.message ?: ""
-//        }
-//        else {
-//            Log.d("RetrofitInstace", "Response not successful")
-//        }
-//
-//        if (ultimoCommit != "") {
-//            ultimoCommit = "Notas del parche: $ultimoCommit"
-//        }
+//        entrenamientosViewModel.getLastCommitInfo()
 //    }
+
+    LaunchedEffect(Unit) {
+        val response = try {
+
+            RetrofitInstanceHiltnt.api.getLastCommitInfo()
+        } catch (e: IOException) {
+            Log.d("RetrofitInstace", "IOException")
+            return@LaunchedEffect
+        } catch (e: HttpException) {
+            Log.d("RetrofitInstace", "HttpException")
+            return@LaunchedEffect
+        }
+
+        if (response.isSuccessful) {
+            ultimoCommit = response.body()?.commit?.message ?: ""
+        }
+        else {
+            Log.d("RetrofitInstace", "Response not successful")
+        }
+
+        if (ultimoCommit != "") {
+            ultimoCommit = "Notas del parche: $ultimoCommit"
+        }
+    }
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
