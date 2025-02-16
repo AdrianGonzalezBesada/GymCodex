@@ -9,7 +9,9 @@ class EjercicioRepositoryImpl @Inject constructor(
     private val dao: EjercicioDao
 ) : IEjercicioRepository {
 
-    override val allEjercicios: Flow<List<Ejercicio>> = dao.getAll()
+    override suspend fun getAllEjercicios(): Flow<List<Ejercicio>> {
+        return dao.getAll()
+    }
 
     override suspend fun getByNombreEjercicio(nombre_ejercicio: String): Flow<List<Ejercicio>> {
         return dao.getByNombreEjercicio(nombre_ejercicio)
@@ -19,8 +21,8 @@ class EjercicioRepositoryImpl @Inject constructor(
         return dao.getByTipoEntrenamiento(tipo_entrenamiento)
     }
 
-    override suspend fun insertEjercicio(training: Ejercicio) {
-        dao.insertEjercicio(training)
+    override suspend fun insertEjercicio(ejercicio: Ejercicio) {
+        dao.insertEjercicio(ejercicio)
     }
 
     override suspend fun insertEjercicios(ejercicios: List<Ejercicio>) {

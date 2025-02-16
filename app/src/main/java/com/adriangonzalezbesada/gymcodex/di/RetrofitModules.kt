@@ -6,6 +6,7 @@ import com.adriangonzalezbesada.gymcodex.data.repositorys.CommitAPIImpl
 import com.adriangonzalezbesada.gymcodex.data.repositorys.EjercicioRepositoryImpl
 import com.adriangonzalezbesada.gymcodex.data.repositorys.ICommitAPI
 import com.adriangonzalezbesada.gymcodex.data.repositorys.IEjercicioRepository
+import com.adriangonzalezbesada.gymcodex.data.use_case.GetLastCommitInfoCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,8 +33,18 @@ object RetrofitModules {
     @Singleton
     fun provideCommitAPIImpl(
         retrofitInstance: RetrofitInstance
-    ) : ICommitAPI {
+    ) : CommitAPIImpl {
         return CommitAPIImpl(retrofitInstance)
+    }
+
+    // Use Cases
+
+    @Provides
+    @Singleton
+    fun provideGetLastCommitInfoCase(
+        commitAPIImpl: CommitAPIImpl
+    ) : GetLastCommitInfoCase {
+        return GetLastCommitInfoCase(commitAPIImpl)
     }
 
 }

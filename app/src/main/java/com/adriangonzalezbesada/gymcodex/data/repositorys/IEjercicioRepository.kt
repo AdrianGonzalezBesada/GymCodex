@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface IEjercicioRepository {
 
-    val allEjercicios: Flow<List<Ejercicio>>
+    suspend fun getAllEjercicios(): Flow<List<Ejercicio>>
 
     suspend fun getByNombreEjercicio(nombre_ejercicio: String): Flow<List<Ejercicio>>
 

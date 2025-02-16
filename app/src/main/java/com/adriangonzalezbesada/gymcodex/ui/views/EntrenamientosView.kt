@@ -121,17 +121,18 @@ fun MyTopAppBar() {
 @Composable
 fun MainContent(modifier: Modifier = Modifier, entrenamientosViewModel: EntrenamientosViewModel) {
 
-    var ultimoCommit by remember { mutableStateOf("") }
-
     /*
     Implementé Hilt para retrofit, pero a la hora de retornar el Response<LasCommitResponse>,
     daba el error java.lang.IllegalArgumentException: Unable to create call adapter for retrofit2.Response<com.adriangonzalezbesada.gymcodex.data.LastCommitResponse>
      */
-//    val ultimoCommit by entrenamientosViewModel.ultimoCommit.collectAsState()
 
-//    LaunchedEffect(Unit) {
-//        entrenamientosViewModel.getLastCommitInfo()
-//    }
+    //    val ultimoCommit by entrenamientosViewModel.ultimoCommit.collectAsState()
+
+    //    LaunchedEffect(Unit) {
+    //        entrenamientosViewModel.getLastCommitInfo()
+    //    }
+
+    var ultimoCommit by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         val response = try {
@@ -147,13 +148,12 @@ fun MainContent(modifier: Modifier = Modifier, entrenamientosViewModel: Entrenam
 
         if (response.isSuccessful) {
             ultimoCommit = response.body()?.commit?.message ?: ""
-        }
-        else {
+        } else {
             Log.d("RetrofitInstace", "Response not successful")
         }
 
         if (ultimoCommit != "") {
-            ultimoCommit = "Notas del parche: $ultimoCommit"
+            ultimoCommit = " $ultimoCommit"
         }
     }
 
@@ -163,9 +163,16 @@ fun MainContent(modifier: Modifier = Modifier, entrenamientosViewModel: Entrenam
     ) {
         if (ultimoCommit != "") {
             Text(
-                "$ultimoCommit",
+                "Notas del parche:",
                 modifier = Modifier
                     .padding(top = 16.dp)
+                    .padding(horizontal = 10.dp)
+            )
+
+            Text(
+                "$ultimoCommit",
+                modifier = Modifier
+                    .padding(top = 10.dp)
                     .padding(horizontal = 10.dp)
             )
         }
@@ -184,6 +191,10 @@ fun MainContent(modifier: Modifier = Modifier, entrenamientosViewModel: Entrenam
 @Composable
 fun RepeaterGridsEjercicios(entrenamientosViewModel: EntrenamientosViewModel) {
 
+    LaunchedEffect(Unit) {
+        entrenamientosViewModel.getAllEjercicios()
+    }
+
     val allEjercicios by entrenamientosViewModel.allEjercicios.collectAsState(initial = emptyList<Ejercicio>())
 
     val listasPorEjercicio: List<List<Ejercicio>> =
@@ -191,7 +202,12 @@ fun RepeaterGridsEjercicios(entrenamientosViewModel: EntrenamientosViewModel) {
 
     for (listaPorEjercicio in listasPorEjercicio) {
 
-        Column(modifier = Modifier.fillMaxWidth().padding(bottom = 45.dp).padding(horizontal = 15.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 45.dp)
+                .padding(horizontal = 15.dp)
+        ) {
             Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -217,12 +233,36 @@ fun RepeaterGridsEjercicios(entrenamientosViewModel: EntrenamientosViewModel) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("${ejercicio.peso_1}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.reps_1}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.peso_2}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.reps_2}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.peso_3}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                    Text("${ejercicio.reps_3}", modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                    Text(
+                        "${ejercicio.peso_1}",
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        "${ejercicio.reps_1}",
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        "${ejercicio.peso_2}",
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        "${ejercicio.reps_2}",
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        "${ejercicio.peso_3}",
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        "${ejercicio.reps_3}",
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
 
@@ -242,7 +282,8 @@ fun RepeaterGridsEjercicios(entrenamientosViewModel: EntrenamientosViewModel) {
                     value = peso1Usuario,
                     onValueChange = { newValue ->
                         val onlyNumber = newValue.filter { it.isDigit() }
-                        peso1Usuario = onlyNumber },
+                        peso1Usuario = onlyNumber
+                    },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     maxLines = 2,
                 )
@@ -251,7 +292,8 @@ fun RepeaterGridsEjercicios(entrenamientosViewModel: EntrenamientosViewModel) {
                     value = reps1Usuario,
                     onValueChange = { newValue ->
                         val onlyNumber = newValue.filter { it.isDigit() }
-                        reps1Usuario = onlyNumber },
+                        reps1Usuario = onlyNumber
+                    },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     maxLines = 2,
                 )
@@ -260,7 +302,8 @@ fun RepeaterGridsEjercicios(entrenamientosViewModel: EntrenamientosViewModel) {
                     value = peso2Usuario,
                     onValueChange = { newValue ->
                         val onlyNumber = newValue.filter { it.isDigit() }
-                        peso2Usuario = onlyNumber },
+                        peso2Usuario = onlyNumber
+                    },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     maxLines = 2,
                 )
@@ -269,7 +312,8 @@ fun RepeaterGridsEjercicios(entrenamientosViewModel: EntrenamientosViewModel) {
                     value = reps2Usuario,
                     onValueChange = { newValue ->
                         val onlyNumber = newValue.filter { it.isDigit() }
-                        reps2Usuario = onlyNumber },
+                        reps2Usuario = onlyNumber
+                    },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     maxLines = 2,
                 )
@@ -278,7 +322,8 @@ fun RepeaterGridsEjercicios(entrenamientosViewModel: EntrenamientosViewModel) {
                     value = peso3Usuario,
                     onValueChange = { newValue ->
                         val onlyNumber = newValue.filter { it.isDigit() }
-                        peso3Usuario = onlyNumber },
+                        peso3Usuario = onlyNumber
+                    },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     maxLines = 2,
                 )
@@ -287,7 +332,8 @@ fun RepeaterGridsEjercicios(entrenamientosViewModel: EntrenamientosViewModel) {
                     value = reps3Usuario,
                     onValueChange = { newValue ->
                         val onlyNumber = newValue.filter { it.isDigit() }
-                        reps3Usuario = onlyNumber },
+                        reps3Usuario = onlyNumber
+                    },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     maxLines = 2,
                 )
@@ -297,19 +343,29 @@ fun RepeaterGridsEjercicios(entrenamientosViewModel: EntrenamientosViewModel) {
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                OutlinedButton(onClick = { entrenamientosViewModel.insertEjercicio(
-                    Ejercicio(
-                        0,
-                        listaPorEjercicio[0].nombre_ejercicio,
-                        "brazo",
-                        peso1Usuario.toIntOrNull(),
-                        reps1Usuario.toIntOrNull(),
-                        peso2Usuario.toIntOrNull(),
-                        reps2Usuario.toIntOrNull(),
-                        peso3Usuario.toIntOrNull(),
-                        reps3Usuario.toIntOrNull(),
-                        ZonedDateTime.now()
-                        )) }
+                OutlinedButton(onClick = {
+                    entrenamientosViewModel.insertEjercicio(
+                        Ejercicio(
+                            0,
+                            listaPorEjercicio[0].nombre_ejercicio,
+                            "brazo",
+                            peso1Usuario.toIntOrNull(),
+                            reps1Usuario.toIntOrNull(),
+                            peso2Usuario.toIntOrNull(),
+                            reps2Usuario.toIntOrNull(),
+                            peso3Usuario.toIntOrNull(),
+                            reps3Usuario.toIntOrNull(),
+                            ZonedDateTime.now()
+                        )
+                    )
+
+                    peso1Usuario = ""
+                    reps1Usuario = ""
+                    peso2Usuario = ""
+                    reps2Usuario = ""
+                    peso3Usuario = ""
+                    reps3Usuario = ""
+                }
                 ) {
                     Text("+")
                 }
