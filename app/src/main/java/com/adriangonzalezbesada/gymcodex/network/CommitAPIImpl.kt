@@ -1,12 +1,8 @@
-package com.adriangonzalezbesada.gymcodex.data.repositorys
+package com.adriangonzalezbesada.gymcodex.network
 
 import android.util.Log
 import com.adriangonzalezbesada.gymcodex.data.LastCommitResponse
 import com.adriangonzalezbesada.gymcodex.data.RetrofitInstance
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.HttpException

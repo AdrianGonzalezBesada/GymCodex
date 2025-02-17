@@ -1,6 +1,6 @@
 package com.adriangonzalezbesada.gymcodex.data
 
-import com.adriangonzalezbesada.gymcodex.data.repositorys.ICommitAPI
+import com.adriangonzalezbesada.gymcodex.network.ICommitAPI
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

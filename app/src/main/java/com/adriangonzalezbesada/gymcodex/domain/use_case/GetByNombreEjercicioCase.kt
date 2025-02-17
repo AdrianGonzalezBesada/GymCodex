@@ -1,4 +1,4 @@
-package com.adriangonzalezbesada.gymcodex.data.use_case
+package com.adriangonzalezbesada.gymcodex.domain.use_case
 
 import com.adriangonzalezbesada.gymcodex.data.Ejercicio
 import com.adriangonzalezbesada.gymcodex.data.repositorys.EjercicioRepositoryImpl
@@ -7,13 +7,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class GetByTipoEntrenamientoCase @Inject constructor(
+class GetByNombreEjercicioCase @Inject constructor(
     private val ejercicioRepositoryImpl: EjercicioRepositoryImpl
 ) {
 
-    suspend fun execute(tipoEntrenamiento: String): Flow<List<Ejercicio>> = withContext(Dispatchers.IO){
+    suspend fun execute(nombreEjercicio: String): Flow<List<Ejercicio>> = withContext(Dispatchers.IO) {
 
-        ejercicioRepositoryImpl.getByTipoEntrenamiento(tipoEntrenamiento)
+        ejercicioRepositoryImpl.getByNombreEjercicio(nombreEjercicio)
+
     }
 
 }

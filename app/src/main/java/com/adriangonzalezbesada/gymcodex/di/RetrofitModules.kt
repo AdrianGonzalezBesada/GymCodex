@@ -1,12 +1,8 @@
 package com.adriangonzalezbesada.gymcodex.di
 
-import com.adriangonzalezbesada.gymcodex.data.EjercicioDao
 import com.adriangonzalezbesada.gymcodex.data.RetrofitInstance
-import com.adriangonzalezbesada.gymcodex.data.repositorys.CommitAPIImpl
-import com.adriangonzalezbesada.gymcodex.data.repositorys.EjercicioRepositoryImpl
-import com.adriangonzalezbesada.gymcodex.data.repositorys.ICommitAPI
-import com.adriangonzalezbesada.gymcodex.data.repositorys.IEjercicioRepository
-import com.adriangonzalezbesada.gymcodex.data.use_case.GetLastCommitInfoCase
+import com.adriangonzalezbesada.gymcodex.network.CommitAPIImpl
+import com.adriangonzalezbesada.gymcodex.domain.use_case.GetLastCommitInfoCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

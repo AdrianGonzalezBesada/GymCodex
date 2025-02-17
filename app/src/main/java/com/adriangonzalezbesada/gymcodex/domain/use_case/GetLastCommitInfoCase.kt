@@ -1,8 +1,7 @@
-package com.adriangonzalezbesada.gymcodex.data.use_case
+package com.adriangonzalezbesada.gymcodex.domain.use_case
 
-import com.adriangonzalezbesada.gymcodex.data.Ejercicio
 import com.adriangonzalezbesada.gymcodex.data.LastCommitResponse
-import com.adriangonzalezbesada.gymcodex.data.repositorys.CommitAPIImpl
+import com.adriangonzalezbesada.gymcodex.network.CommitAPIImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response

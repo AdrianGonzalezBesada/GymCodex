@@ -1,4 +1,4 @@
-package com.adriangonzalezbesada.gymcodex.data.repositorys
+package com.adriangonzalezbesada.gymcodex.network
 
 import com.adriangonzalezbesada.gymcodex.data.LastCommitResponse
 import retrofit2.Response

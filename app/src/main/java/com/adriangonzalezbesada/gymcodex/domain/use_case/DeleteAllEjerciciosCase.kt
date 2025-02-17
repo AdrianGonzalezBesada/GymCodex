@@ -1,4 +1,4 @@
-package com.adriangonzalezbesada.gymcodex.data.use_case
+package com.adriangonzalezbesada.gymcodex.domain.use_case
 
 import com.adriangonzalezbesada.gymcodex.data.repositorys.EjercicioRepositoryImpl
 import kotlinx.coroutines.Dispatchers
