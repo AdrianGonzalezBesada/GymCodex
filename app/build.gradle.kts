@@ -57,6 +57,7 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.livedata.ktx)
     val room_version = "2.6.1"  // Define la versión de Room
+    val sqlite_version = "2.4.0"
 
     // Room
     implementation("androidx.room:room-runtime:$room_version")
@@ -85,6 +86,11 @@ dependencies {
 
     // Serializacion
     implementation("org.jetbrains.kotlin.plugin.serialization:org.jetbrains.kotlin.plugin.serialization.gradle.plugin:1.9.25")
+
+    // SQLite
+    implementation("androidx.sqlite:sqlite-ktx:$sqlite_version")
+    implementation("androidx.sqlite:sqlite-framework:$sqlite_version")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

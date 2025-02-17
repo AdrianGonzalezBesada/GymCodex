@@ -1,6 +1,7 @@
 package com.adriangonzalezbesada.gymcodex
 
 import android.content.ComponentCallbacks2
+import android.content.ContentValues
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,8 @@ import androidx.room.Room
 import com.adriangonzalezbesada.gymcodex.data.Ejercicio
 import com.adriangonzalezbesada.gymcodex.data.GymCodexDatabase
 import com.adriangonzalezbesada.gymcodex.data.repositorys.EjercicioRepositoryImpl
+import com.adriangonzalezbesada.gymcodex.data.sqlite.GymCodexSQLiteContract
+import com.adriangonzalezbesada.gymcodex.data.sqlite.WorkoutsDBHelper
 import com.adriangonzalezbesada.gymcodex.ui.viewmodels.EntrenamientosViewModel
 import com.adriangonzalezbesada.gymcodex.ui.views.EntrenamientosView
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +25,9 @@ import java.time.ZonedDateTime
 class MainActivity : ComponentActivity() {
 
     private val entrenamientosViewModel: EntrenamientosViewModel by viewModels()
+
+    private val dbHelper by lazy { WorkoutsDBHelper(this) }
+    private val workoutsDb by lazy { dbHelper.writableDatabase }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +53,19 @@ class MainActivity : ComponentActivity() {
     override fun onStart() {
         super.onStart()
         Log.d("ActivityLifecycle", "Aplicación abierta")
+
+        val values = ContentValues().apply {
+            put(GymCodexSQLiteContract.WorkoutEntry.COLUMN_NAME_WORKOUT_NAME, "Sentadilla")
+            put(GymCodexSQLiteContract.WorkoutEntry.COLUMN_NAME_WORKOUT_TYPE, "Pierna")
+            put(GymCodexSQLiteContract.WorkoutEntry.COLUMN_NAME_WORKOUT_WEIGHT_1, 1)
+            put(GymCodexSQLiteContract.WorkoutEntry.COLUMN_NAME_WORKOUT_REPS_1, 1)
+            put(GymCodexSQLiteContract.WorkoutEntry.COLUMN_NAME_WORKOUT_WEIGHT_2, 1)
+            put(GymCodexSQLiteContract.WorkoutEntry.COLUMN_NAME_WORKOUT_REPS_2, 1)
+            put(GymCodexSQLiteContract.WorkoutEntry.COLUMN_NAME_WORKOUT_WEIGHT_3, 1)
+            put(GymCodexSQLiteContract.WorkoutEntry.COLUMN_NAME_WORKOUT_REPS_3, 1)
+        }
+
+        val newRowId = workoutsDb?.insert(GymCodexSQLiteContract.WorkoutEntry.TABLE_NAME, null, values)
     }
 
     override fun onPause() {
